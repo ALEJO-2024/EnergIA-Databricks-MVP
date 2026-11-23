@@ -50,7 +50,7 @@ Este repositorio contiene el flujo desarrollado bajo **arquitectura Medallón en
 ---
 
 ## 🔗 Repositorio Complementario
-* 📊 **[Ver versión desarrollada en Power BI](https://github.com/ALEJO-2024/EnergIA-PowerBI)** *(Actualiza este enlace con la URL de tu repositorio de Power BI)*
+* 📊 **[Ver versión desarrollada en Power BI](https://github.com/ALEJO-2024/EnergIA-PowerBI)** 
 
 ---
 
