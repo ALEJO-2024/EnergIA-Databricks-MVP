@@ -39,10 +39,13 @@ Este repositorio contiene el flujo desarrollado bajo **arquitectura Medallón en
 ---
 
 ## 📁 Estructura del Repositorio
-* `Plataforma_Servicios_Publicos.ipynb` — Notebook principal con el procesamiento ETL y gráficas en Databricks[cite: 2, 8].
-* `capa_bronze/` — Datasets de origen utilizados en la ingesta[cite: 2].
-* `index.html`, `style.css`, `script.js` — Código fuente del dashboard web interactivo[cite: 2].
-* `logo.jpeg` — Identidad visual de EnergIA[cite: 2, 6].
+* `Plataforma_Servicios_Publicos.ipynb` — Notebook principal con el procesamiento ETL bajo arquitectura Medallón y gráficas en Databricks.
+* `capa_bronze/` — Fuentes de datos crudas de origen:
+  * Códigos municipales (`DIVIPOLA`) y proyecciones poblacionales (`PPED-AreaMun`).
+  * Histórico de tarifas de energía eléctrica y reportes operativos (`.csv`).
+  * Registros meteorológicos históricos (`open_meteo_archive.json`, `open_meteo_medellin_2021-01.json`).
+* `index.html`, `styles.css`, `script.js` — Código fuente del dashboard web interactivo.
+* `logo.jpeg` — Identidad visual de EnergIA.
 
 ---
 
