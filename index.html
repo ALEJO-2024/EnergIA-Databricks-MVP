@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENERGIA - Energy & Utilities Business Intelligence Platform</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Estilos Personalizados -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#070C18] text-slate-100 min-h-screen font-sans flex flex-col justify-between overflow-x-hidden">
+
+  <!-- ENCABEZADO / BRANDING BAR -->
+  <header class="bg-[#0D1527] border-b border-slate-800 px-6 py-3 flex items-center justify-between sticky top-0 z-50 shadow-xl">
+    <div class="flex items-center space-x-4">
+      <!-- LOGO DE ENERGIA -->
+      <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-700/60 shadow-inner flex items-center justify-center">
+        <!-- Reemplaza 'logo.png' con la ruta local o URL de tu imagen -->
+        <img id="brand-logo" src="logo.jpeg" alt="ENERGIA BI Platform" class="h-10 w-auto object-contain fallback-logo-hide" onerror="this.style.display='none'; document.getElementById('brand-fallback').classList.remove('hidden');" />
+        <div id="brand-fallback" class="hidden flex items-center space-x-2 text-amber-500 font-bold">
+          <i class="fa-solid fa-bolt text-2xl"></i>
+          <span class="text-white text-lg tracking-wider">ENERGIA</span>
+        </div>
+      </div>
+      
+      <div>
+        <h1 class="text-lg font-bold tracking-wide text-white flex items-center gap-2">
+          ENERGIA <span class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded uppercase font-semibold">Live Monitoring</span>
+        </h1>
+        <p class="text-xs text-slate-400">Energy & Utilities Business Intelligence Platform — Antioquia, Colombia</p>
+      </div>
+    </div>
+
+    <!-- CONTROLES GLOBALES Y FILTROS -->
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center bg-[#162238] rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-300">
+        <i class="fa-regular fa-calendar text-amber-400 mr-2"></i>
+        <span class="font-medium mr-2">Periodo:</span>
+        <select id="period-select" class="bg-transparent text-white font-semibold focus:outline-none cursor-pointer">
+          <option value="2021-ALL" class="bg-[#0D1527]">Consolidado 2021</option>
+          <option value="2021-Q3" class="bg-[#0D1527]">Q3 2021</option>
+          <option value="2021-Q2" class="bg-[#0D1527]">Q2 2021</option>
+          <option value="2021-Q1" class="bg-[#0D1527]">Q1 2021</option>
+        </select>
+        
+      </div>
+
+      <button id="reset-filter-btn" class="hidden bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all">
+        <i class="fa-solid fa-filter-circle-xmark"></i>
+        <span>Limpiar Filtro (<span id="active-muni-label"></span>)</span>
+      </button>
+
+      <div class="text-right pl-2 border-l border-slate-800">
+        <span class="block text-xs font-semibold text-emerald-400 flex items-center justify-end gap-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Sistema Operativo
+        </span>
+        <span class="text-[10px] text-slate-500">Actualizado: Oct 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- RECUADRO PRINCIPAL (CUADRANTES 2x2) -->
+  <main class="p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 flex-grow">
+    
+    <!-- CUADRANTE 1: MAPA ESPACIAL (SUP. IZQUIERDO) -->
+    <section class="bg-[#0F172A]/90 border border-slate-800 rounded-xl p-4 flex flex-col shadow-lg relative backdrop-blur-md">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 bg-amber-500/10 border border-amber-500/20 rounded-md text-amber-400">
+            <i class="fa-solid fa-map-location-dot"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Monitoreo Espacial de Eventos en Red</h2>
+            <p class="text-[11px] text-slate-400">Concentración de fallas registradas por municipio (Antioquia)</p>
+          </div>
+        </div>
+        <span class="text-[11px] bg-slate-800 text-slate-300 px-2 py-1 rounded border border-slate-700">
+          <i class="fa-solid fa-hand-pointer mr-1 text-amber-400"></i> Haz clic en un municipio
+        </span>
+      </div>
+
+      <!-- MAP CONTAINER -->
+      <div id="map" class="w-full h-[320px] rounded-lg border border-slate-800 bg-[#070C18] relative z-10"></div>
+      
+      <!-- LEYENDA DEL MAPA -->
+      <div class="mt-3 flex items-center justify-between text-xs text-slate-400 bg-[#070C18]/60 p-2 rounded border border-slate-800/80">
+        <div class="flex items-center space-x-4">
+          <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block mr-1.5 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span> Criticidad Alta</span>
+          <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-cyan-400 inline-block mr-1.5 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></span> Criticidad Media/Baja</span>
+        </div>
+        <div class="text-[11px] text-slate-500">
+          Fuente: <span class="text-slate-400">mab_utilidades_resumen</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUADRANTE 2: DEMOGRÁFICO Y SUSCRIPTORES (SUP. DERECHO) -->
+    <section class="bg-[#0F172A]/90 border border-slate-800 rounded-xl p-4 flex flex-col shadow-lg backdrop-blur-md">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-md text-cyan-400">
+            <i class="fa-solid fa-users-line"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Distribución Demográfica de Suscriptores</h2>
+            <p class="text-[11px] text-slate-400">Usuarios afectados desglosados por Estrato Socioeconómico</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI CARD HIGHLIGHT -->
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="bg-gradient-to-r from-[#111C33] to-[#162544] p-3 rounded-lg border border-cyan-500/30 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] text-cyan-300/80 font-semibold uppercase tracking-wider block">Suscriptores Residenciales</span>
+            <span id="kpi-subscribers" class="text-xl font-extrabold text-cyan-400 tracking-tight">889,5 mil</span>
+          </div>
+          <i class="fa-solid fa-house-user text-2xl text-cyan-400/20"></i>
+        </div>
+        <div class="bg-gradient-to-r from-[#111C33] to-[#162544] p-3 rounded-lg border border-slate-700 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">No Residencial (Comercial/Ind)</span>
+            <span id="kpi-non-res" class="text-xl font-extrabold text-slate-200 tracking-tight">90,9 mil</span>
+          </div>
+          <i class="fa-solid fa-building text-2xl text-slate-500/20"></i>
+        </div>
+      </div>
+
+      <!-- CHART CONTAINER -->
+      <div class="flex-grow relative min-h-[200px]">
+        <canvas id="stratumChart"></canvas>
+      </div>
+    </section>
+
+    <!-- CUADRANTE 3: VARIABLE CLIMÁTICA (INF. IZQUIERDO) -->
+    <section class="bg-[#0F172A]/90 border border-slate-800 rounded-xl p-4 flex flex-col shadow-lg backdrop-blur-md">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 bg-blue-500/10 border border-blue-500/20 rounded-md text-blue-400">
+            <i class="fa-solid fa-cloud-showers-heavy"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Correlación Climática vs. Fallas</h2>
+            <p class="text-[11px] text-slate-400">Precipitación Pluvial (mm) e Impacto en Operación</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">Lluvia Total Acumulada</span>
+          <span id="kpi-rainfall" class="text-xs font-bold text-blue-400">1,240 mm</span>
+        </div>
+      </div>
+
+      <!-- CHART CONTAINER -->
+      <div class="flex-grow relative min-h-[220px]">
+        <canvas id="climateChart"></canvas>
+      </div>
+    </section>
+
+    <!-- CUADRANTE 4: PÉRDIDAS FINANCIERAS (INF. DERECHO) -->
+    <section class="bg-[#0F172A]/90 border border-slate-800 rounded-xl p-4 flex flex-col shadow-lg backdrop-blur-md">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 bg-rose-500/10 border border-rose-500/20 rounded-md text-rose-400">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Impacto Financiero </h2>
+            <p class="text-[11px] text-slate-400">Estimación monetaria acumulada por Energía No Suministrada</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI FINANCIAL HIGHLIGHT -->
+      <div class="bg-gradient-to-r from-rose-950/40 via-[#1A1024] to-[#0F172A] p-3 rounded-lg border border-rose-500/30 mb-3 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] text-rose-300 font-semibold uppercase tracking-wider block">Pérdida Financiera por Respuesta Retrasada</span>
+          <span id="kpi-financial-loss" class="text-2xl font-black text-rose-400 tracking-tight">$350.400.000 COP</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">Tarifa Promedio KWh</span>
+          <span id="kpi-tariff" class="text-xs font-bold text-amber-400">$845,2 COP</span>
+        </div>
+      </div>
+
+      <!-- CHART CONTAINER -->
+      <div class="flex-grow relative min-h-[190px]">
+        <canvas id="financialChart"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER STATUS BAR -->
+  <footer class="bg-[#090F1E] border-t border-slate-800/80 px-6 py-2 flex items-center justify-between text-xs text-slate-500">
+    <div class="flex items-center space-x-4">
+      <span><i class="fa-solid fa-database text-amber-500 mr-1"></i> Modelo: <strong class="text-slate-300">mab_utilidades_resumen</strong></span>
+      <span><i class="fa-solid fa-network-wired text-cyan-500 mr-1"></i> Esquema: Copo de Nieve / Estrella</span>
+    </div>
+    <div>
+      <span>Desarrollado para <strong class="text-amber-400">EnergiAX Demo Day</strong> | BeTek 2026</span>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Script Principal -->
+  <script src="script.js"></script>
+</body>
+</html>
