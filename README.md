@@ -1,6 +1,9 @@
 # ⚡ EnergIA — Plataforma de Analítica e Inteligencia de Negocios (Databricks & Web MVP)
 
-![EnergIA Logo](logo.jpeg)
+<p align="center">
+  <img src="logo.jpeg" alt="EnergIA Logo" width="260"/>
+</p>
+
 
 ## 🌐 Demo Interactiva en Vivo
 👉 **[Explorar Dashboard Interactivo en Netlify](https://proyecto-integrador-betek-2026.netlify.app/)**
