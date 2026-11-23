@@ -3,7 +3,7 @@
 ![EnergIA Logo](logo.jpeg)
 
 ## 🌐 Demo Interactiva en Vivo
-👉 **[Explorar Dashboard Interactivo en Netlify](https://proyectointegrador-betek.netlify.app)**
+👉 **[Explorar Dashboard Interactivo en Netlify](https://proyecto-integrador-betek-2026.netlify.app/)**
 
 ---
 
