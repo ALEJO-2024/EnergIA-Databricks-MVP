@@ -8,17 +8,17 @@
 ---
 
 ## 📌 Descripción del Proyecto
-**EnergIA** es una solución analítica diseñada para el sector de distribución de energía eléctrica en Antioquia, Colombia[cite: 8]. El proyecto integra datos históricos de 2021 sobre fallas en la red eléctrica, precipitación pluvial, estratificación socioeconómica y tarifas para mitigar pérdidas operativas por Energía No Suministrada (ENS)[cite: 8].
+**EnergIA** es una solución analítica diseñada para el sector de distribución de energía eléctrica en Antioquia, Colombia. El proyecto integra datos históricos de 2021 sobre fallas en la red eléctrica, precipitación pluvial, estratificación socioeconómica y tarifas para mitigar pérdidas operativas por Energía No Suministrada (ENS).
 
-Este repositorio contiene el flujo desarrollado bajo **arquitectura Medallón en Databricks**, las visualizaciones generadas en el entorno de notebooks y el **MVP web interactivo** desplegado en Netlify[cite: 2, 8].
+Este repositorio contiene el flujo desarrollado bajo **arquitectura Medallón en Databricks**, las visualizaciones generadas en el entorno de notebooks y el **MVP web interactivo** desplegado en Netlify.
 
 ---
 
 ## 🏗️ Arquitectura y Flujo de Datos
-1. **Capa Bronze:** Ingesta de datos crudos provenientes de registros climáticos, reportes de fallas en red, suscriptores y tarifas municipales[cite: 2, 8].
-2. **Capa Silver:** Limpieza, estandarización temporal y cruce relacional de fuentes dispersas[cite: 8].
-3. **Capa Gold:** Construcción de tablas agregadas y cálculo de KPIs ejecutivos para visualización[cite: 8].
-4. **Capa de Presentación (Web MVP):** Interfaz web responsiva con filtrado cruzado en tiempo real por municipio[cite: 8].
+1. **Capa Bronze:** Ingesta de datos crudos provenientes de registros climáticos, reportes de fallas en red, suscriptores y tarifas municipales.
+2. **Capa Silver:** Limpieza, estandarización temporal y cruce relacional de fuentes dispersas.
+3. **Capa Gold:** Construcción de tablas agregadas y cálculo de KPIs ejecutivos para visualización.
+4. **Capa de Presentación (Web MVP):** Interfaz web responsiva con filtrado cruzado en tiempo real por municipio.
 
 ---
 
@@ -55,7 +55,7 @@ Este repositorio contiene el flujo desarrollado bajo **arquitectura Medallón en
 ---
 
 ## 👥 Equipo de Desarrollo
-* **Oscar Alejandro Londoño Gil**[cite: 8]
-* **Diana Marcela Escudero**[cite: 8]
-* **Samuel David Ruiz**[cite: 8]
-* **Juliana Gómez**[cite: 8]
+* **Oscar Alejandro Londoño Gil**
+* **Diana Marcela Escudero**
+* **Samuel David Ruiz**
+* **Juliana Gómez**
